@@ -1,0 +1,545 @@
+0000 c; Tetris table for roms with checksum = 16bf
+0000 ;Tetris Dissassembly, 8-Jun-96
+0000 ;
+0000 ; Known cheats:
+0000 ;  Down + [Start] at intro screen  -->  Expert Mode
+0000 ;
+0000 ; Ram Locations:
+0000 ;  ffcc = Set to 1 on serial transfer completion
+0003 b
+0008 c; Derived by Jeff Frohwein
+000b b
+0028 c
+0034 b
+0040 c
+0040 ;VBlank IRQ
+0043 b
+0048 c
+0048 ;LCDC Status IRQ (Not Used)
+004b b
+0050 c
+0050 ;Timer Overflow IRQ (Not Used)
+0053 b
+0058 c
+0058 ;Serial Transfer Completion IRQ
+006e o+
+006e w
+006e x+
+0078 o-
+0078 c
+0078 x-
+00d0 ; This routine is not used.
+00da b
+0100 c
+0100 ; Code Begin
+0104 b
+0104 ; Nintendo Title Character Area
+0147 o+
+0147 ; Cartridge type
+0148 ; Rom Size
+0149 ; Ram Size
+014a n
+014a w
+014a ; Manufacturer Code
+014c b
+014c ; Version Number
+014d ; Complement Check
+014e n
+014e w
+014e ; Checksum
+0150 o-
+0150 c
+0153 ; This routine is not used.
+0166 ; Add number in DE to score at (hl).
+0166 ; Stop counting if score reaches 999999.
+017e ; VBlank Interrupt Routine
+0190 ; Send byte at ffcf out serial port using internal clock
+0199 e
+01d5 ; Initiate DMA transfer
+020c ; Set ram from d000 to dfff to 0
+021b ; Clear Interrupt Flag & Enable Registers
+0222 ; Set scroll regs, LCDC Status, & Serial port to 0
+022f ; Set LCD control to Operation
+0233 ; Loop until LCDC Y-Coord = 148
+0239 ; Set LCD control to Stop completely
+023d ; Setup colors for Background & Sprites
+0247 ; Setup sound channel outputs
+0252 ; Set Rom bank to zero
+0252 ; (Not needed since the original has no MBC.)
+0254 n
+0257 ; Initialize stack pointer
+025a ; Set ram from df00 to dfff to 0
+0264 ; Set ram from c000 to cfff to 0
+0272 ; Set ram from 8000 to 9fff to 0
+0281 ; Set ram from fe00 to feff to 0
+028a ; Set ram from ff7f to fffe to 0
+0293 ; Copy DMA transfer routine to ffb6
+02a0 ; Fill screen with 2f
+02a3 ; Reset sound registers
+02a6 ; Enable serial i/o & v blank interrupts
+02aa e
+02b2 ; Setup branch point for routine at 2f8
+02b6 ; Set LCD control to Operation
+02bc ; Clear all interrupt flags
+02be ; Set window x & y position to 0
+02c2 ; Set timer modulo to 0
+02c4 e
+02c4 ; Read buttons & return values
+02cd ; If all arrow keys are down at the
+02cd ; same time, then jump to 21b
+02d6 e
+02e4 e
+02ed e
+02ed ; Wait for a VBlank interrupt to occur
+02f2 e
+02fb o+
+02fb w
+0369 o-
+0369 c
+0369 ; Display credits screen
+038a ; This is responsible for the credit screen ignoring the start
+038a ; button for so long. Lower this value to make it respond sooner.
+0393 ; Wait for initial credit screen timer to run out.
+03a0 ; Look for user pressing a button. If not found, continue credit
+03a0 ; screen for another delay period.
+03ae ; Display Intro Select Players Screen
+03d6 e
+041f ; Start demo mode
+0474 ; This routine is not used.
+048b ; Send 55h out serial port using external clock.
+0493 e
+0498 ; Serial Transfer is complete
+04a7 ; Test for Up button
+04ab ; Test for A button
+04af ; Test for B button
+04b3 ; Test for Down button
+04c5 ; Send 29h out serial port using internal clock.
+057d ; This routine is not used.
+0582 ; This instruction is not used.
+0677 ; Display Mario VS Luigi screen
+0705 b
+0725 c
+0725 ; Move a block of memory
+0725 ;  HL = Start Addr
+0725 ;  DE = End Addr
+0725 ;  B = Length of data
+07f6 b
+080e c
+08c4 b
+08e4 c
+0a98 ; Delay routine ?
+0f3c b
+0f60 c
+0f75 n
+10a8 ; The next 3 instructions are not used.
+10ed b
+1112 c
+11b8 n
+12f5 b
+1305 c
+141b b
+1437 c
+1444 ; Select Game & Music Type screen
+14a8 b
+14b0 c
+157b ; Display Type-A Level Select / Top Score screen
+1615 b
+1629 c
+1629 ; Display Type-B Level Select / High / Top Score screen
+16d2 b
+16e6 c
+1741 b
+174e c
+178a ; Fill c000 to c09f with 0
+1a07 ; Display Falling Blocks screen
+1b06 b
+1b1b c
+1b40 b
+1b68 c
+1ba9 n
+1cdd b
+1ce2 c
+1d41 n
+1d4a n
+1d53 n
+1eef n
+1efc n
+1f09 n
+1fae n
+1fb6 n
+1fbd n
+2665 ; This routine is not used.
+26bf b
+2795 c
+2795 ; Fill 9800 to 9bff with 2f
+2798 n
+27a4 ; Move a block of memory (Same as z80 LDIR)
+27a4 ;  HL = Start Addr
+27a4 ;  DE = End Addr
+27a4 ;  BC = Length of data
+27bc n
+27c3 ; Copy characters with only two colors
+27d7 ; Copy character set to character ram
+27c6 n
+27da n                  
+27e1 n
+27e1 ; This instruction is not used.
+27eb ; Copy a screen from DE to screen ram
+2820 ; Prepare for screen memory update by halting LCD controller
+2839 b
+2826 ; Disable VBlank interrupt
+29a6 c
+29a6 ; Read buttons & return value at ff81
+29a6 ;  $80 - Start   $8 - Down
+29a6 ;  $40 - Select  $4 - Up
+29a6 ;  $20 - B       $2 - Left
+29a6 ;  $10 - A       $1 - Right
+29d4 ; debounce keys to minimize errors
+2a10 ; This routine is not used.
+2a7f ; Initiate DMA transfer from c000 to fe00
+2b64 w
+2d5a b
+2d68 w
+2d6a b
+2d7a w
+2d7c b
+2d89 w
+2d8b b
+2d9a w
+2d9c b
+2dac w
+2dae b
+2dbd w
+2dbf b
+2dcb w
+2dcd b
+2ddc w
+2dde b
+2deb w
+2ded b
+2dfc w
+2dfe b
+2e0b w
+2e0d b
+2e1c w
+2e1e b
+2e2e w
+2e30 b
+2e40 w
+2e42 b
+2e52 w
+2e54 b
+2e64 w
+2e66 b
+2e76 w
+2e78 b
+2e86 w
+2e88 b
+2e98 w
+2e9a b
+2ea8 w
+2eaa b
+2eb9 w
+2ebb b
+2eca w
+2ecc b
+2edb w
+2edd b
+2eec w
+2eee b
+2efa w
+2efc b
+2f0b w
+2f0d b
+2f1c w
+2f1e b
+2f2d w
+2f2f b
+2f36 w
+2f38 b
+2f3f w
+2f41 b
+2f48 w
+2f4a b
+2f51 w
+2f53 b
+2f55 w
+2f57 b
+2f59 w
+2f5b b
+2f5d w
+2f5f b
+2f61 w
+2f63 b
+2f65 w
+2f67 b
+2f69 w
+2f6b b
+2f6d w
+2f6f b
+2f71 w
+2f73 b
+2f75 w
+2f77 b
+2f79 w
+2f7b b
+2f84 w
+2f86 b
+2f8f w
+2f91 b
+2fa3 w
+2fa5 b
+2fb8 w
+2fba b
+2fc1 w
+2fc3 b
+2fca w
+2fcc b
+2fd1 w
+2fd3 b
+2fd8 w
+2fda b
+2fe3 w
+2fe5 b
+2fee w
+2ff0 b
+3003 w
+3005 b
+3019 w
+301b b
+3022 w
+3024 b
+302b w
+302d b
+3032 w
+3034 b
+3039 w
+303b b
+3040 w
+3042 b
+3047 w
+3049 b
+304e w
+3050 b
+3055 w
+3057 b
+305c w
+305e b
+3067 w
+3069 b
+306e w
+3070 b
+3075 w
+3077 b
+307c w
+307e b
+3083 w
+3085 b
+308c w
+308e b
+3095 w
+3097 b
+309e w
+30a0 b
+30a7 w
+30a9 b
+30b0 w
+30b2 b
+30b9 w
+30bb b
+30c0 w
+30c2 b
+30c7 w
+30c9 b
+30cb w
+30cd b
+30ea w
+30ec b
+30ee w
+30f0 b
+30f2 w
+30f4 b
+30f6 w
+30f8 b
+30fa w
+30fc b
+30fe w
+3100 b
+3102 w
+3104 b
+3106 w
+3108 b
+310a w
+310c b
+310e w
+3110 b
+3112 w
+3114 b
+3116 w
+3118 b
+311c w
+311e b
+3125 w
+3127 b
+312b w
+312d b
+3131 w
+3133 b
+313a w
+313c b
+3146 w
+3148 b
+315d w
+315f b
+3164 w
+3166 b
+317c w
+317e b
+318e w
+3190 b
+319d w
+319f b
+31a3 w
+31a5 b
+3e8f ; Type-A Falling Blocks Screen (20x18 chars)
+3ff7 ; Type-B Falling Blocks Screen (20x18 chars)
+415f ; Character Set
+4a07 ; Initial Credits Screen (20x18 chars)
+4b6f ; Intro Player Select Screen (20x18 chars)
+4cd7 ; Select Game & Music Type Screen (20x18 chars)
+4e3f ; Type-A Select Level / Top Score Screen (20x18 chars)
+4fa7 ; Type-B Select Level / High / Top Score Screen (20x18 chars)
+5214 ; Mario VS Luigi Screen (20x18 chars)
+537c ; Type-B Falling Blocks Screen (20x18 chars) (same as 3ff7 ????)
+6480 e
+6480 w
+64d2 c
+657b b
+6583 c
+659b b
+65aa c
+65e7 b
+65f1 c
+6623 b
+6628 c
+6640 b
+6654 c
+6695 b
+66af c
+66ec b
+66fc c
+6740 b
+679d c
+67fb b
+6800 c
+6857 b
+686b c
+6956 ; Set sound #1 regs
+695d ; Set sound #2 regs
+6964 ; Set sound #3 regs
+696b ; Set sound #4 regs
+6998 ; Copy from hl to sound wave pattern ram
+69a5 ; Reset some sound registers
+6abe b
+6b02 c
+6b0d ; Copy 2 bytes from (hl) to (de)
+6b0d ; (Copy can't cross page boundary.)
+6b64 n
+6bb9 ; Increment 16-bit number pointed to by hl
+6bc5 ; Increment twice 16-bit number pointed to by hl
+6bce ; b = ((hl))
+6d9d ; The next 4 instructions are not used.
+6dcb b
+6e04 w
+6e04 l-
+6e04 ; Frequency Octave Table
+6e04 ;  The following 6 octaves of 12 values each
+6e04 ;  comprise a 72 data word table.
+6e94 b
+6e94 l+
+6e94 e
+6f40 w
+6f4a b
+6f4b w
+6f55 b
+6f56 w
+6f60 b
+6f61 w
+6f6b b
+6f6c w
+6f76 b
+6f77 w
+6f81 b
+6f82 w
+6f8c b
+6f8d w
+6f97 b
+6f98 w
+6fa2 b
+6fa3 w
+6fad b
+6fae w
+6fb8 b
+6fb9 w
+6fc3 b
+6fc4 w
+6fce b
+6fcf w
+6fd9 b
+6fda w
+6fe4 b
+6fe5 w
+6fef b
+6ff0 w
+7018 b
+7142 w
+7142 e
+7168 b
+72b8 w
+72b8 e
+7308 b
+7543 w
+7543 e
+7557 b
+758d w
+758d e
+75a1 b
+75fc w
+75fc e
+7604 b
+7633 w
+7633 e
+766f b
+786c w
+786c e
+788e b
+7a00 w
+7a00 e
+7a04 b
+7a26 w
+7a26 e
+7a2c b
+7a6f w
+7a6f e
+7a77 b
+7adf w
+7adf e
+7ae9 b
+7b65 w
+7b65 e
+7b77 b
+7c24 w
+7c24 e
+7c2e b
+7cf9 w
+7cf9 e
+7d29 b
+7e44 w
+7e44 e
+7e4e b
+7e91 w
+7e91 e
+7ebb b
+7ff0 c
+7ff6 b
+8000 z
